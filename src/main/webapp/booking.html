@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Service</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<h2>Book Service</h2>
+
+<form action="BookServiceServlet" method="post">
+    <input type="text" name="customerName" />
+<input type="text" name="phone" />
+<input type="text" name="serviceType" />
+
+    <input type="date" name="date" required><br><br>
+
+    <label>Service Address:</label><br>
+    <input type="text" name="address" required><br><br>
+
+    <label>Description:</label><br>
+    <textarea name="description"></textarea><br><br>
+
+    <input type="submit" value="Confirm Booking">
+
+</form>
+
+</body>
+</html>
