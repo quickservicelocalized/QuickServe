@@ -1,15 +1,9 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="quickserve.DBConnection" %>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Our Services</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+<link rel="stylesheet" href="style.css">
 
-<h2>Available Services</h2>
+<div class="card-container">
 
 <%
     Connection con = DBConnection.getConnection();
@@ -19,18 +13,17 @@
     while(rs.next()) {
 %>
 
-<div class="service-card">
-    <h3><%= rs.getString("service_name") %></h3>
-    <p><%= rs.getString("description") %></p>
-    <a href="ProvidersServlet?serviceName=<%= rs.getString("service_name") %>">
-        <button>View Providers</button>
+    <a class="service-card"
+   href="<%= request.getContextPath() %>/ProvidersServlet?serviceName=<%= rs.getString("service_name") %>"
+   target="contentFrame">
+        <div class="icon-circle">⚙</div>
+        <h3><%= rs.getString("service_name") %></h3>
+        <p><%= rs.getString("description") %></p>
+
     </a>
-</div>
 
 <%
     }
-    con.close();
 %>
 
-</body>
-</html>
+</div>

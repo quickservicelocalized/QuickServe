@@ -1,125 +1,88 @@
-
 body {
     margin: 0;
-    font-family: 'Segoe UI', Arial, sans-serif;
+    font-family: Arial, sans-serif;
     background-color: #f4f6f9;
 }
 
-
-.hero {
+/* Layout */
+.dashboard {
     display: flex;
-    min-height: 90vh;
+    height: 100vh;
 }
 
-
-.hero-left {
-    flex: 1;
-    background: linear-gradient(135deg, #1e2a38, #243b55);
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #1f2937;
     color: white;
-    padding: 60px;
+    padding: 20px;
 }
 
-.hero-left h1 {
-    font-size: 40px;
-    margin-bottom: 20px;
-}
-
-.hero-left h1 span {
-    color: #2bb3ff;
-}
-
-.hero-left p {
+.sidebar a {
+    display: block;
     color: #cbd5e1;
-    margin-bottom: 40px;
-    line-height: 1.6;
+    text-decoration: none;
+    margin-bottom: 15px;
 }
 
-/* SERVICES GRID */
-.service-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
+.sidebar a:hover {
+    color: white;
 }
 
-.service-box {
+/* Main Section */
+.main {
+    flex: 1;
     display: flex;
-    gap: 15px;
+    flex-direction: column;
 }
 
-.service-icon {
-    width: 50px;
-    height: 50px;
-    background-color: #2bb3ff;
+/* Header */
+.header {
+    background: white;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Content */
+.content-frame {
+    flex: 1;
+    border: none;
+}
+
+/* Services Card Layout */
+.card-container {
+    padding: 40px;
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.service-card {
+    width: 220px;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #111;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    transition: 0.3s;
+    text-align: center;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.icon-circle {
+    width: 60px;
+    height: 60px;
+    background-color: #2563eb;
+    color: white;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px;
-}
-
-.service-box h3 {
-    margin: 0;
-    font-size: 18px;
-}
-
-.service-box p {
-    font-size: 14px;
-    margin: 5px 0 0 0;
-    color: #d1d5db;
-}
-
-/* RIGHT SIDE IMAGE */
-.hero-right {
-    flex: 1;
-    background: url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d')
-        center/cover no-repeat;
-    position: relative;
-}
-
-.hero-right::before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.3);
-}
-
-/* ===== PROVIDER & HISTORY CARDS ===== */
-.container {
-    width: 85%;
-    margin: 40px auto;
-}
-
-.card {
-    background: white;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-}
-
-.card h3 {
-    margin-top: 0;
-}
-
-/* BUTTONS */
-button {
-    background-color: #2bb3ff;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #1b8cd8;
-}
-
-.cancel-btn {
-    background-color: #e63946;
-}
-
-.cancel-btn:hover {
-    background-color: #b71c1c;
+    margin: 0 auto 15px auto;
+    font-size: 24px;
 }

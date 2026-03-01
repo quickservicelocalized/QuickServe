@@ -1,28 +1,53 @@
 <%@ page import="java.util.*" %>
 <link rel="stylesheet" href="style.css">
-<%
-    List<Map<String, Object>> providers =
-        (List<Map<String, Object>>) request.getAttribute("providers");
-
-    if (providers != null && !providers.isEmpty()) {
-        for (Map<String, Object> p : providers) {
-%>
-
-<div class="service-card">
-    <h3><%= p.get("name") %></h3>
-    <p>Experience: <%= p.get("experience") %> years</p>
-    <p>Rating: <%= p.get("rating") %></p>
-    <p>Price: <%= p.get("price") %></p>
-    <a href="BookServlet?providerId=<%= p.get("id") %>">
-    <button>Book Now</button>
-</a>
-</div>
 
 <%
-        }
-    } else {
+List<Map<String,Object>> providers =
+    (List<Map<String,Object>>) request.getAttribute("providers");
+
+String serviceName = (String) request.getAttribute("serviceName");
 %>
-    <p>No providers found.</p>
+
+<div class="table-card">
+<h2>Providers for <%= serviceName %></h2>
+
+<table>
+<tr>
+    <th>Name</th>
+    <th>Experience</th>
+    <th>Rating</th>
+    <th>Price</th>
+    <th>Action</th>
+</tr>
+
+<%
+if (providers != null && !providers.isEmpty()) {
+    for(Map<String,Object> p : providers) {
+%>
+
+<tr>
+    <td><%= p.get("name") %></td>
+    <td><%= p.get("experience") %> yrs</td>
+    <td><%= p.get("rating") %></td>
+    <td>₹ <%= p.get("price") %></td>
+    <td>
+        <a href="<%= request.getContextPath() %>/BookServlet?providerId=<%= p.get("id") %>"
+           target="contentFrame">
+            <button class="btn-primary">Book</button>
+        </a>
+    </td>
+</tr>
+
 <%
     }
+} else {
 %>
+<tr>
+    <td colspan="5">No providers found</td>
+</tr>
+<%
+}
+%>
+
+</table>
+</div>

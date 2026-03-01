@@ -18,6 +18,7 @@ public class ProvidersServlet extends HttpServlet {
 	        PreparedStatement ps = con.prepareStatement(
 	            "SELECT * FROM providers WHERE service_type=?"
 	        );
+	        
 
 	        ps.setString(1, serviceName);
 
