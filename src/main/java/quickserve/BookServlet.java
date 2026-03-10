@@ -9,39 +9,52 @@ import javax.servlet.http.*;
 @WebServlet("/BookServlet")
 public class BookServlet extends HttpServlet {
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
+throws ServletException, IOException {
 
-        int providerId = Integer.parseInt(request.getParameter("providerId"));
+int providerId = Integer.parseInt(request.getParameter("providerId"));
 
-        try {
-            Connection con = DBConnection.getConnection();
+try{
 
-            // Get provider details
-            PreparedStatement ps1 = con.prepareStatement(
-                "SELECT name, service_type FROM providers WHERE id=?"
-            );
-            ps1.setInt(1, providerId);
-            ResultSet rs = ps1.executeQuery();
+Connection con = DBConnection.getConnection();
 
-            if (rs.next()) {
+PreparedStatement ps1 = con.prepareStatement(
+"SELECT name, service_type FROM providers WHERE id=?"
+);
 
-                PreparedStatement ps2 = con.prepareStatement(
-                    "INSERT INTO bookings (provider_id, provider_name, service_type) VALUES (?, ?, ?)"
-                );
+ps1.setInt(1, providerId);
 
-                ps2.setInt(1, providerId);
-                ps2.setString(2, rs.getString("name"));
-                ps2.setString(3, rs.getString("service_type"));
+ResultSet rs = ps1.executeQuery();
 
-                ps2.executeUpdate();
-            }
+if(rs.next()){
 
-            // Redirect to history page
-            response.sendRedirect("history.jsp?success=true");
+String providerName = rs.getString("name");
+String serviceType = rs.getString("service_type");
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+/* Temporary customer name */
+String customerName = "Customer";
+
+/* Insert booking */
+PreparedStatement ps2 = con.prepareStatement(
+"INSERT INTO bookings(provider_id, provider_name, service_type, booking_date, customer_name, status) VALUES(?,?,?,?,?,?)"
+);
+
+ps2.setInt(1, providerId);
+ps2.setString(2, providerName);
+ps2.setString(3, serviceType);
+ps2.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+ps2.setString(5, customerName);
+ps2.setString(6, "PENDING");
+
+ps2.executeUpdate();
+
+}
+
+response.sendRedirect("customer/history.jsp?success=true");
+
+}catch(Exception e){
+e.printStackTrace();
+}
+
+}
 }

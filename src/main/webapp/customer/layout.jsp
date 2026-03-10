@@ -2,20 +2,18 @@
 <html>
 <head>
     <title>QuickServe Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
 <div class="dashboard">
 
-    <!-- Sidebar -->
     <div class="sidebar">
         <h2>QuickServe</h2>
-        <a href="services.jsp">Services</a>
-        <a href="history.jsp">Bookings</a>
+        <a href="/customer/services.jsp">Services</a>
+        <a href="/customer/history.jsp">Bookings</a>
     </div>
 
-    <!-- Main -->
     <div class="main">
 
         <div class="header">

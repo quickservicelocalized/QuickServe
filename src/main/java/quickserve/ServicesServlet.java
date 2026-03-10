@@ -29,7 +29,7 @@ public class ServicesServlet extends HttpServlet {
 
             request.setAttribute("services", services);
 
-            RequestDispatcher rd = request.getRequestDispatcher("services.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("customer/services.jsp");
             rd.forward(request, response);
 
         } catch(Exception e) {

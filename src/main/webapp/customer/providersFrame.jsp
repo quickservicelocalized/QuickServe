@@ -5,8 +5,8 @@
 </head>
 
 <frameset cols="30%,70%">
-    <frame src="services.jsp" name="leftFrame">
-    <frame src="providers.jsp" name="rightFrame">
+    <frame src="/customer/services.jsp" name="leftFrame">
+    <frame src="/customer/providers.jsp" name="rightFrame">
 
 </frameset>
 

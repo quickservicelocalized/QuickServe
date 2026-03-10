@@ -1,4 +1,5 @@
 package quickserve;
+
 import java.io.IOException;
 import java.sql.*;
 import javax.servlet.*;
@@ -7,43 +8,93 @@ import javax.servlet.http.*;
 
 @WebServlet("/ProvidersServlet")
 public class ProvidersServlet extends HttpServlet {
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-	        throws ServletException, IOException {
 
-	    String serviceName = request.getParameter("serviceName");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-	    try {
-	        Connection con = DBConnection.getConnection();
+        String serviceName = request.getParameter("serviceName");
+        String rating = request.getParameter("rating");
+        String price = request.getParameter("price");
+        String discount = request.getParameter("discount");
 
-	        PreparedStatement ps = con.prepareStatement(
-	            "SELECT * FROM providers WHERE service_type=?"
-	        );
-	        
+        try {
+            Connection con = DBConnection.getConnection();
 
-	        ps.setString(1, serviceName);
+            StringBuilder sql = new StringBuilder(
+                "SELECT * FROM providers WHERE 1=1"
+            );
 
-	        ResultSet rs = ps.executeQuery();
+           
+            if (serviceName != null && !serviceName.isEmpty()) {
+                sql.append(" AND service_type = ?");
+            }
 
-	        java.util.List<java.util.Map<String, Object>> providers = new java.util.ArrayList<>();
+           
+            if (rating != null && !rating.isEmpty()) {
+                sql.append(" AND rating >= ?");
+            }
 
-	        while (rs.next()) {
-	            java.util.Map<String, Object> row = new java.util.HashMap<>();
-	            row.put("id", rs.getInt("id"));
-	            row.put("name", rs.getString("name"));
-	            row.put("price", rs.getDouble("price"));
-	            row.put("experience", rs.getInt("experience"));
-	            row.put("rating", rs.getDouble("rating"));
-	            providers.add(row);
-	        }
+           
+            if (price != null && !price.isEmpty()) {
+                sql.append(" AND price BETWEEN ? AND ?");
+            }
 
-	        request.setAttribute("providers", providers);
-	        request.setAttribute("serviceName", serviceName);
+           
+            if (discount != null && !discount.isEmpty()) {
+                sql.append(" AND discount >= ?");
+            }
 
-	        RequestDispatcher rd = request.getRequestDispatcher("providers.jsp");
-	        rd.forward(request, response);
+            PreparedStatement ps = con.prepareStatement(sql.toString());
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	}
+            int index = 1;
+
+            // Set parameters in same order
+            if (serviceName != null && !serviceName.isEmpty()) {
+                ps.setString(index++, serviceName);
+            }
+
+            if (rating != null && !rating.isEmpty()) {
+                ps.setDouble(index++, Double.parseDouble(rating));
+            }
+
+            if (price != null && !price.isEmpty()) {
+                String[] range = price.split("-");
+                ps.setDouble(index++, Double.parseDouble(range[0]));
+                ps.setDouble(index++, Double.parseDouble(range[1]));
+            }
+
+            if (discount != null && !discount.isEmpty()) {
+                ps.setInt(index++, Integer.parseInt(discount));
+            }
+
+            ResultSet rs = ps.executeQuery();
+
+            java.util.List<java.util.Map<String, Object>> providers =
+                    new java.util.ArrayList<>();
+
+            while (rs.next()) {
+                java.util.Map<String, Object> row =
+                        new java.util.HashMap<>();
+
+                row.put("id", rs.getInt("id"));
+                row.put("name", rs.getString("name"));
+                row.put("price", rs.getDouble("price"));
+                row.put("experience", rs.getInt("experience"));
+                row.put("rating", rs.getDouble("rating"));
+                row.put("discount", rs.getInt("discount"));
+
+                providers.add(row);
+            }
+
+            request.setAttribute("providers", providers);
+            request.setAttribute("serviceName", serviceName);
+
+            RequestDispatcher rd =
+                    request.getRequestDispatcher("customer/providers.jsp");
+            rd.forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
