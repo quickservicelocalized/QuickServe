@@ -2,39 +2,33 @@
 <html>
 <head>
 <title>Provider Registration</title>
-<link rel="stylesheet" href="<%=request.getContextPath()%>/css/style.css">
+
+<link rel="stylesheet" href="<%=request.getContextPath()%>/css/style.css?v=1">
+
 </head>
 
-<body>
-
-<div class="form-container">
+<body class="auth-page">
+<div class="login-card">
 
 <h2>Provider Registration</h2>
 
 <form action="<%=request.getContextPath()%>/ProviderRegisterServlet" method="post">
 
-<label>Name</label>
-<input type="text" name="name" required>
+<input type="text" name="name" placeholder="Name">
 
-<label>Email</label>
-<input type="email" name="email" required>
+<input type="email" name="email" placeholder="Email">
 
-<label>Password</label>
-<input type="password" name="password" required>
+<input type="password" name="password" placeholder="Password">
 
-<label>Service Type</label>
-<input type="text" name="service_type" placeholder="Plumbing / Electrician" required>
+<input type="text" name="service_type" placeholder="Service Type">
 
-<label>Experience (years)</label>
-<input type="number" name="experience" required>
+<input type="number" name="experience" placeholder="Experience">
 
-<label>Price</label>
-<input type="number" name="price" required>
+<input type="number" name="price" placeholder="Price">
 
-<label>Discount (%)</label>
-<input type="number" name="discount" value="0">
+<input type="number" name="discount" placeholder="Discount">
 
-<button type="submit" class="btn-primary">Register</button>
+<button class="login-btn">Register</button>
 
 </form>
 
