@@ -10,21 +10,24 @@
 <body>
 
 <%
-if("true".equals(request.getParameter("success"))){
-%>
-<script>
-alert("Booking Successful!");
-</script>
-<%
-}
+    // ✅ Security check
+    if(session.getAttribute("customerName") == null){
+        response.sendRedirect("../index.jsp");
+        return;
+    }
 
-if("true".equals(request.getParameter("cancel"))){
+    // Alerts
+    if("true".equals(request.getParameter("success"))){
 %>
-<script>
-alert("Booking Cancelled Successfully!");
-</script>
+<script>alert("Booking Successful!");</script>
 <%
-}
+    }
+
+    if("true".equals(request.getParameter("cancel"))){
+%>
+<script>alert("Booking Cancelled Successfully!");</script>
+<%
+    }
 %>
 
 <h2 class="page-title">Your Booking History</h2>
@@ -32,53 +35,59 @@ alert("Booking Cancelled Successfully!");
 <div class="history-container">
 
 <%
-Connection con = DBConnection.getConnection();
-Statement stmt = con.createStatement();
+    Connection con = DBConnection.getConnection();
 
-ResultSet rs = stmt.executeQuery(
-"SELECT * FROM bookings ORDER BY booking_date DESC"
-);
+    // ✅ Get logged-in user
+    String customerName = (String) session.getAttribute("customerName");
 
-while(rs.next()){
+    // ✅ Correct query
+    PreparedStatement ps = con.prepareStatement(
+        "SELECT * FROM bookings WHERE customer_name = ?"
+    );
 
-String status = rs.getString("status");
+    ps.setString(1, customerName);
+
+    ResultSet rs = ps.executeQuery();
+
+    while(rs.next()){
+        String status = rs.getString("status");
 %>
 
 <div class="history-card">
 
-<div class="card-header">
-<h3><%= rs.getString("provider_name") %></h3>
-</div>
+    <div class="card-header">
+        <h3><%= rs.getString("provider_name") %></h3>
+    </div>
 
-<div class="card-body">
-<p><strong>Service:</strong> <%= rs.getString("service_type") %></p>
-<p><strong>Date:</strong> <%= rs.getTimestamp("booking_date") %></p>
-<p><strong>Status:</strong> <%= status %></p>
-</div>
+    <div class="card-body">
+        <p><strong>Service:</strong> <%= rs.getString("service_type") %></p>
+        <p><strong>Date:</strong> <%= rs.getTimestamp("booking_date") %></p>
+        <p><strong>Status:</strong> <%= status %></p>
+    </div>
 
-<div class="card-footer">
+    <div class="card-footer">
+
+        <%
+        if("PENDING".equals(status)){
+        %>
+
+        <a href="<%=request.getContextPath()%>/CancelServlet?id=<%=rs.getInt("id")%>"
+           onclick="return confirm('Are you sure you want to cancel this booking?');">
+
+            <button class="btn-danger">Cancel</button>
+
+        </a>
+
+        <%
+        }
+        %>
+
+    </div>
+
+</div>
 
 <%
-if("PENDING".equals(status)){
-%>
-
-<a href="<%=request.getContextPath()%>/CancelServlet?id=<%=rs.getInt("id")%>"
-onclick="return confirm('Are you sure you want to cancel this booking?');">
-
-<button class="btn-danger">Cancel</button>
-
-</a>
-
-<%
-}
-%>
-
-</div>
-
-</div>
-
-<%
-}
+    }
 %>
 
 </div>

@@ -97,10 +97,9 @@ margin-top:40px;
 
 <div class="login-buttons">
 
-<a href="customer/dashboard.jsp">Customer Login</a>
-
+<a href="customer/customerLogin.jsp">Customer Login</a>
 <a href="provider/providerLogin.jsp">Provider Login</a>
-
+<a href="admin/adminLogin.jsp">Admin Login</a>
 </div>
 
 </div>
