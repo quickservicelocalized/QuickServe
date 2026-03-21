@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>QuickServe</title>
+
+<meta charset="UTF-8">
+
+<style>
+
+/* Header */
+.header {
+    background:#1f2937;
+    color:white;
+    padding:15px 30px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.header h2{
+margin:0;
+}
+
+/* Login buttons */
+.login-buttons a{
+background:#2563eb;
+color:white;
+padding:8px 14px;
+border-radius:6px;
+text-decoration:none;
+margin-left:10px;
+}
+
+.login-buttons a:hover{
+background:#1e40af;
+}
+
+/* Landing section */
+.landing{
+text-align:center;
+padding:80px 20px;
+}
+
+.landing h1{
+font-size:40px;
+margin-bottom:20px;
+}
+
+.landing p{
+font-size:18px;
+color:#555;
+}
+
+/* Service cards */
+.service-section{
+display:flex;
+justify-content:center;
+gap:30px;
+padding:40px;
+}
+
+.service-box{
+background:white;
+padding:25px;
+width:200px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+text-align:center;
+}
+
+/* Review section */
+.review{
+background:#f3f4f6;
+padding:40px;
+text-align:center;
+}
+
+/* Footer */
+.footer{
+background:#1f2937;
+color:white;
+text-align:center;
+padding:15px;
+margin-top:40px;
+}
+
+/* ================= NEW ADDITIONS ================= */
+
+/* DARK MODE */
+.dark{
+    background:#111;
+    color:white;
+}
+.dark .service-box,
+.dark .review{
+    background:#1f2937;
+    color:white;
+}
+
+/* TOGGLE BUTTON */
+#themeToggle{
+    position:fixed;
+    top:20px;
+    right:20px;
+    padding:10px;
+    border:none;
+    border-radius:50%;
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+}
+
+/* CHAT BUTTON */
+#chat-toggle{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    width:60px;
+    height:60px;
+    background:#2563eb;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    color:white;
+    cursor:pointer;
+    box-shadow:0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* CHATBOX */
+#chatbox{
+    position:fixed;
+    bottom:90px;
+    right:20px;
+    width:320px;
+    height:420px;
+    background:white;
+    border-radius:15px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+    display:none;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+.chat-header{
+    background:#2563eb;
+    color:white;
+    padding:12px;
+    display:flex;
+    justify-content:space-between;
+}
+
+.chat-body{
+    flex:1;
+    padding:10px;
+    overflow-y:auto;
+}
+
+.bot-msg{
+    background:#e5e7eb;
+    padding:10px;
+    margin:8px;
+    border-radius:10px;
+    max-width:70%;
+}
+
+.user-msg{
+    background:#2563eb;
+    color:white;
+    padding:10px;
+    margin:8px;
+    border-radius:10px;
+    max-width:70%;
+    margin-left:auto;
+}
+
+.chat-input input{
+    width:100%;
+    padding:12px;
+    border:none;
+}
+
+/* ================================================= */
+
+</style>
+
+</head>
+
+<body>
+
+<!-- DARK MODE BUTTON -->
+<button id="themeToggle">🌙</button>
+
+<!-- Header -->
+<div class="header">
+
+<h2>QuickServe</h2>
+
+<div class="login-buttons">
+
+<a href="#">Customer Login</a>
+<a href="#">Provider Login</a>
+<a href="#">Admin Login</a>
+
+</div>
+
+</div>
+
+<!-- Landing Page -->
+<div class="landing">
+
+<h1>Welcome to QuickServe</h1>
+
+<p>
+Book trusted professionals for home services easily.
+</p>
+
+</div>
+
+<!-- Services -->
+<div class="service-section">
+
+<div class="service-box">
+<h3>Plumbing</h3>
+<p>All plumbing services</p>
+</div>
+
+<div class="service-box">
+<h3>Electrician</h3>
+<p>Electrical repair & installation</p>
+</div>
+
+<div class="service-box">
+<h3>Cleaning</h3>
+<p>Home and office cleaning</p>
+</div>
+
+</div>
+
+<!-- Reviews -->
+<div class="review">
+
+<h2>Customer Reviews</h2>
+
+<p>⭐ ⭐ ⭐ ⭐ ⭐ 4.8 Average Rating</p>
+
+<p>Trusted by hundreds of customers.</p>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+
+<p>© 2026 QuickServe | Home Service Marketplace</p>
+
+</div>
+
+<!-- ================= CHATBOT ================= -->
+
+<div id="chat-toggle">🤖</div>
+
+<div id="chatbox">
+
+<div class="chat-header">
+QuickServe Bot
+<span onclick="toggleChat()">✖</span>
+</div>
+
+<div class="chat-body" id="chatBody">
+<div class="bot-msg">Hi 👋 Welcome to QuickServe!</div>
+</div>
+
+<div class="chat-input">
+<input id="chatInput" placeholder="Type..." onkeypress="enter(event)">
+</div>
+
+</div>
+
+<!-- ================= SCRIPT ================= -->
+
+<script>
+
+/* DARK MODE */
+document.getElementById("themeToggle").onclick = function(){
+    document.body.classList.toggle("dark");
+};
+
+/* OPEN CHAT */
+document.getElementById("chat-toggle").onclick = function(){
+    document.getElementById("chatbox").style.display = "flex";
+};
+
+/* CLOSE CHAT */
+function toggleChat(){
+    document.getElementById("chatbox").style.display = "none";
+}
+
+/* SEND MESSAGE */
+function enter(e){
+    if(e.key === "Enter"){
+        let msg = document.getElementById("chatInput").value;
+        if(msg.trim() === "") return;
+
+        let chat = document.getElementById("chatBody");
+
+        chat.innerHTML += `<div class="user-msg">${msg}</div>`;
+
+        setTimeout(()=>{
+            chat.innerHTML += `<div class="bot-msg">We will help you with "${msg}"</div>`;
+            chat.scrollTop = chat.scrollHeight;
+        },500);
+
+        document.getElementById("chatInput").value="";
+    }
+}
+
+</script>
+
+</body>
+</html>
