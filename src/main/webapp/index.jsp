@@ -1,10 +1,38 @@
-<!DOCTYPE html>
+<%@ page import="java.sql.*" %>
+<%@ page import="quickserve.DBConnection" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+double avgRating = 0;
+int totalReviews = 0;
 
+try {
+    Connection con = DBConnection.getConnection();
+
+    if(con != null){
+        PreparedStatement ps = con.prepareStatement(
+            "SELECT AVG(rating), COUNT(*) FROM reviews"
+        );
+
+        ResultSet rs = ps.executeQuery();
+
+        if(rs.next()){
+            avgRating = rs.getDouble(1);
+            totalReviews = rs.getInt(2);
+        }
+    }
+
+} catch(Exception e){
+    e.printStackTrace();
+}
+%>
+
+<!DOCTYPE html>
 <html>
 <head>
 <title>QuickServe</title>
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/style.css">
 <meta charset="UTF-8">
+
 <style>
 
 /* Header */
@@ -96,7 +124,6 @@ margin-top:40px;
 <h2>QuickServe</h2>
 
 <div class="login-buttons">
-
 <a href="customer/customerLogin.jsp">Customer Login</a>
 <a href="provider/providerLogin.jsp">Provider Login</a>
 <a href="admin/adminLogin.jsp">Admin Login</a>
@@ -106,7 +133,6 @@ margin-top:40px;
 
 
 <!-- Landing Page -->
-
 <div class="landing">
 
 <h1>Welcome to QuickServe</h1>
@@ -119,7 +145,6 @@ Book trusted professionals for home services easily.
 
 
 <!-- Services -->
-
 <div class="service-section">
 
 <div class="service-box">
@@ -141,24 +166,42 @@ Book trusted professionals for home services easily.
 
 
 <!-- Reviews -->
-
 <div class="review">
 
 <h2>Customer Reviews</h2>
 
-<p>⭐ ⭐ ⭐ ⭐ ⭐ 4.8 Average Rating</p>
+<p style="font-size:22px; color:gold;">
 
-<p>Trusted by hundreds of customers.</p>
+<%
+int stars = (int) Math.round(avgRating);
+
+if(totalReviews == 0){
+    out.print("No reviews yet");
+} else {
+    for(int i=0;i<stars;i++){ out.print("&#9733;"); }
+    for(int i=stars;i<5;i++){ out.print("&#9733;"); }
+%>
+
+&nbsp; <%= String.format("%.1f", avgRating) %> Average Rating
+
+<%
+}
+%>
+
+</p>
+
+<p>
+Based on <b><%= totalReviews %></b> reviews
+</p>
+
+<p>Trusted by our customers.</p>
 
 </div>
 
 
 <!-- Footer -->
-
 <div class="footer">
-
 <p>© 2026 QuickServe | Home Service Marketplace</p>
-
 </div>
 
 </body>

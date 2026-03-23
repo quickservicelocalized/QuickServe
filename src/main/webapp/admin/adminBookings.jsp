@@ -42,7 +42,7 @@
 </head>
 <body>
 
-<h2 class="page-title">Manage Bookings</h2>
+<h2 class="page-title">Total Bookings</h2>
 
 <table class="table">
 
@@ -52,7 +52,7 @@
     <th>Service</th>
     <th>Customer</th>
     <th>Status</th>
-    <th>Action</th>
+    
 </tr>
 
 <%
@@ -68,20 +68,8 @@ for(Map<String,Object> b : bookings) {
     <td><%= b.get("service") %></td>
     <td><%= b.get("customer") %></td>
     <td><%= b.get("status") %></td>
-    <td>
+    
 
-```
-    <a class="btn accept"
-       href="../AcceptBookingServlet?id=<%= b.get("id") %>">Accept</a>
-
-    <a class="btn reject"
-       href="../RejectBookingServlet?id=<%= b.get("id") %>">Reject</a>
-
-    <a class="btn complete"
-       href="../CompleteBookingServlet?id=<%= b.get("id") %>">Complete</a>
-
-</td>
-```
 
 </tr>
 

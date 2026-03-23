@@ -86,7 +86,11 @@
         </div>
 
         <!-- Content Frame -->
-        <iframe name="contentFrame" class="content-frame"></iframe>
+<iframe 
+    name="contentFrame"
+    src="<%= request.getContextPath() %>/customer/customerHome.jsp"
+    class="content-frame">
+</iframe>
 
     </div>
 

@@ -28,6 +28,12 @@
 <script>alert("Booking Cancelled Successfully!");</script>
 <%
     }
+
+    if("true".equals(request.getParameter("review"))){
+%>
+<script>alert("Review Submitted Successfully!");</script>
+<%
+    }
 %>
 
 <h2 class="page-title">Your Booking History</h2>
@@ -37,10 +43,8 @@
 <%
     Connection con = DBConnection.getConnection();
 
-    // ✅ Get logged-in user
     String customerName = (String) session.getAttribute("customerName");
 
-    // ✅ Correct query
     PreparedStatement ps = con.prepareStatement(
         "SELECT * FROM bookings WHERE customer_name = ?"
     );
@@ -63,13 +67,49 @@
         <p><strong>Service:</strong> <%= rs.getString("service_type") %></p>
         <p><strong>Date:</strong> <%= rs.getTimestamp("booking_date") %></p>
         <p><strong>Status:</strong> <%= status %></p>
+
+<%
+    if("COMPLETED".equals(status)){
+
+        PreparedStatement check = con.prepareStatement(
+            "SELECT * FROM reviews WHERE booking_id=?"
+        );
+
+        check.setInt(1, rs.getInt("id"));
+
+        ResultSet checkRs = check.executeQuery();
+
+        if(checkRs.next()){
+%>
+
+        <!-- ✅ Already Reviewed -->
+        <button style="background:green;color:white;padding:6px 10px;border:none;border-radius:5px;">
+            ✔ Review Submitted
+        </button>
+
+<%
+        } else {
+%>
+
+        <!-- ⭐ Rate Provider -->
+        <a href="<%=request.getContextPath()%>/customer/review.jsp?providerId=<%=rs.getInt("provider_id")%>&bookingId=<%=rs.getInt("id")%>">
+            <button style="background:#2563eb;color:white;padding:6px 10px;border:none;border-radius:5px;">
+                ⭐ Rate Provider
+            </button>
+        </a>
+
+<%
+        }
+    }
+%>
+
     </div>
 
     <div class="card-footer">
 
-        <%
-        if("PENDING".equals(status)){
-        %>
+<%
+    if("PENDING".equals(status)){
+%>
 
         <a href="<%=request.getContextPath()%>/CancelServlet?id=<%=rs.getInt("id")%>"
            onclick="return confirm('Are you sure you want to cancel this booking?');">
@@ -78,9 +118,9 @@
 
         </a>
 
-        <%
-        }
-        %>
+<%
+    }
+%>
 
     </div>
 

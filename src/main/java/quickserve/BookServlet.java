@@ -9,55 +9,70 @@ import javax.servlet.http.*;
 @WebServlet("/BookServlet")
 public class BookServlet extends HttpServlet {
 
-protected void doGet(HttpServletRequest request, HttpServletResponse response)
-throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
 
-int providerId = Integer.parseInt(request.getParameter("providerId"));
+        try {
 
-try{
+            // ✅ Get parameters
+            int providerId = Integer.parseInt(request.getParameter("providerId"));
+            String date = request.getParameter("date");
+            String time = request.getParameter("time");
+            String location = request.getParameter("location");
 
-Connection con = DBConnection.getConnection();
+            HttpSession session = request.getSession();
+            String customerName = (String) session.getAttribute("customerName");
 
-/* ✅ GET PROVIDER DETAILS + PRICE */
-PreparedStatement ps1 = con.prepareStatement(
-"SELECT name, service_type, price FROM providers WHERE id=?"
-);
+            // 🔴 DEBUG (VERY IMPORTANT)
+            System.out.println("Provider: " + providerId);
+            System.out.println("Date: " + date);
+            System.out.println("Time: " + time);
+            System.out.println("Location: " + location);
+            System.out.println("Customer: " + customerName);
 
-ps1.setInt(1, providerId);
+            Connection con = DBConnection.getConnection();
 
-ResultSet rs = ps1.executeQuery();
+            // ✅ Get provider details
+            PreparedStatement ps1 = con.prepareStatement(
+                "SELECT name, service_type, price FROM providers WHERE id=?"
+            );
+            ps1.setInt(1, providerId);
 
-if(rs.next()){
+            ResultSet rs = ps1.executeQuery();
 
-String providerName = rs.getString("name");
-String serviceType = rs.getString("service_type");
-double price = rs.getDouble("price");   // ✅ FIXED
+            if(rs.next()){
 
-HttpSession session = request.getSession();
-String customerName = (String) session.getAttribute("customerName");
+                String providerName = rs.getString("name");
+                String serviceType = rs.getString("service_type");
+                double price = rs.getDouble("price");
 
-/* ✅ INSERT BOOKING WITH PRICE */
-PreparedStatement ps2 = con.prepareStatement(
-"INSERT INTO bookings(provider_id, provider_name, service_type, booking_date, customer_name, status, price) VALUES(?,?,?,?,?,?,?)"
-);
+                // ✅ Insert booking
+                PreparedStatement ps2 = con.prepareStatement(
+                    "INSERT INTO bookings(provider_id, provider_name, service_type, booking_date, customer_name, status, price, location) VALUES(?,?,?,?,?,?,?,?)"
+                );
 
-ps2.setInt(1, providerId);
-ps2.setString(2, providerName);
-ps2.setString(3, serviceType);
-ps2.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
-ps2.setString(5, customerName);
-ps2.setString(6, "PENDING");
-ps2.setDouble(7, price);   // ✅ CORRECT
+                ps2.setInt(1, providerId);
+                ps2.setString(2, providerName);
+                ps2.setString(3, serviceType);
+                ps2.setString(4, date + " " + time);
+                ps2.setString(5, customerName);
+                ps2.setString(6, "PENDING");
+                ps2.setDouble(7, price);
+                ps2.setString(8, location);
 
-ps2.executeUpdate();
+                int rows = ps2.executeUpdate();
 
-}
+                System.out.println("Inserted Rows: " + rows); // DEBUG
+            }
 
-response.sendRedirect("customer/history.jsp?success=true");
+            // ✅ REDIRECT (IMPORTANT FIX)
+            response.sendRedirect(request.getContextPath() + "/customer/history.jsp?success=true");
 
-}catch(Exception e){
-e.printStackTrace();
-}
+        } catch(Exception e){
+            e.printStackTrace();
 
-}
+            // ❌ Show error instead of blank page
+            response.getWriter().println("<h3>Error: " + e.getMessage() + "</h3>");
+        }
+    }
 }

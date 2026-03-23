@@ -25,6 +25,9 @@
         <a href="#" onclick="loadPage('provider/providerProfile.jsp')">
             Profile
         </a>
+        <a href="#" onclick="loadPage('provider/providerReviews.jsp')">
+    Reviews
+</a>
 
         <a href="#" onclick="loadPage('provider/providerEarnings.jsp')">
             Earnings
@@ -43,11 +46,11 @@
         </div>
 
         <iframe 
-            id="contentFrame"
-            name="contentFrame"
-            src="<%=request.getContextPath()%>/ProviderBookingsServlet"
-            class="content-frame">
-        </iframe>
+    id="contentFrame"
+    name="contentFrame"
+    src="<%=request.getContextPath()%>/provider/providerHome.jsp"
+    class="content-frame">
+</iframe>
 
     </div>
 

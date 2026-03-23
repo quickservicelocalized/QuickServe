@@ -11,6 +11,12 @@ List<Map<String,Object>> providers =
 <%
 if (providers != null && !providers.isEmpty()) {
     for(Map<String,Object> p : providers) {
+
+        // ⭐ get rating safely
+        Double ratingObj = (Double) p.get("avg_rating");
+        double rating = (ratingObj == null) ? 0 : ratingObj;
+
+        int fullStars = (int) Math.round(rating);
 %>
 
 <div class="service-card">
@@ -19,14 +25,29 @@ if (providers != null && !providers.isEmpty()) {
 
     <h3><%= p.get("name") %></h3>
 
-    <p>Experience:<%= p.get("experience") %> yrs</p>
-    <p>Rating:<%= p.get("rating") %></p>
+    <p>Experience: <%= p.get("experience") %> yrs</p>
+
+    <!-- ⭐ RATING -->
+    <p>
+        Rating:
+        <span style="color:gold; font-size:18px;">
+        <%
+            if(rating == 0){
+                out.print("No Rating");
+            } else {
+                for(int i=0;i<fullStars;i++){ out.print("&#9733;"); }
+                for(int i=fullStars;i<5;i++){ out.print("&#9733;"); }
+                out.print(" (" + String.format("%.1f", rating) + ")");
+            }
+        %>
+        </span>
+    </p>
+
     <p>Price: ₹<%= p.get("price") %></p>
-<p>Discount: <%= p.get("discount") %>%</p>
+    <p>Discount: <%= p.get("discount") %>%</p>
 
     <div class="card-actions">
-        <a href="<%= request.getContextPath() %>/BookServlet?providerId=<%= p.get("id") %>"
-           target="contentFrame">
+        <a href="<%= request.getContextPath() %>/customer/bookingForm.jsp?providerId=<%= p.get("id") %>">
             <button class="btn-primary">Book Now</button>
         </a>
     </div>
