@@ -23,20 +23,22 @@ public class AddServiceServlet extends HttpServlet {
             int providerId = Integer.parseInt(session.getAttribute("providerId").toString());
 
             String serviceName = request.getParameter("serviceName");
+            String description =request.getParameter("description");
             double price = Double.parseDouble(request.getParameter("price"));
             int discount = Integer.parseInt(request.getParameter("discount"));
-
+            
             Connection con = DBConnection.getConnection();
 
             PreparedStatement ps = con.prepareStatement(
-                "INSERT INTO services(provider_id, service_name, price, discount, availability) VALUES(?,?,?,?,?)"
+                "INSERT INTO services(provider_id, service_name, description, price, discount, availability) VALUES(?,?,?,?,?,?)"
             );
 
             ps.setInt(1, providerId);
             ps.setString(2, serviceName);
-            ps.setDouble(3, price);
-            ps.setInt(4, discount);
-            ps.setString(5, "AVAILABLE");
+            ps.setString(3, description);
+            ps.setDouble(4, price);
+            ps.setInt(5, discount);
+            ps.setString(6, "AVAILABLE");
 
             ps.executeUpdate();
 

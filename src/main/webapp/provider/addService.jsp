@@ -81,9 +81,10 @@ input{
 
 <label>Service Name</label>
 <input type="text" name="serviceName" required>
-
 <label>Price</label>
 <input type="number" name="price" required>
+<label>Description</label>
+<input type="text" name="description" required>
 
 <label>Discount</label>
 <input type="number" name="discount" required>
